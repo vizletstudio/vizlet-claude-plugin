@@ -1,10 +1,10 @@
 {
   "name": "vizlet",
   "displayName": "Vizlet",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "View, review and share 3D, CAD, BIM and point-cloud models as live browser workspaces. Bundles Vizlet's MCP server with a skill that teaches Claude when to use it and how to author, check and publish a track.",
   "author": {
-    "name": "Vizlet",
+    "name": "Vizlet Labs",
     "url": "https://vizlet.ai"
   },
   "homepage": "https://vizlet.ai/developers",

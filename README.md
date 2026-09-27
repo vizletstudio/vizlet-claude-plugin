@@ -59,3 +59,10 @@ in, and costs about $0.10 a run.
 - Privacy: https://vizlet.ai/docs/privacy
 - Terms: https://vizlet.ai/docs/terms
 - Support: https://vizlet.ai/contact
+
+## License
+
+This plugin (the skill, its references, the manifests and the routing eval) is
+released under the MIT License; see [LICENSE](LICENSE). The Vizlet service it
+connects to is not: that is governed by the
+[Vizlet Terms](https://vizlet.ai/docs/terms).

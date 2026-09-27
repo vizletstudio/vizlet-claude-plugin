@@ -1,0 +1,6 @@
+{
+  "vizlet": {
+    "type": "http",
+    "url": "https://mcp.vizlet.ai"
+  }
+}

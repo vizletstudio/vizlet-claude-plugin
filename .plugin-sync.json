@@ -1,0 +1,16 @@
+{
+  "note": "Written by scripts/sync-claude-plugin.mjs in the private Vizlet repository. Edit the plugin there, not here.",
+  "version": "0.2.2",
+  "source_commit": "02747a445b171be2a5bc6bef89cc32998432911e",
+  "files": [
+    ".claude-plugin/marketplace.json",
+    ".claude-plugin/plugin.json",
+    ".mcp.json",
+    "README.md",
+    "evals/routing-cases.json",
+    "evals/routing.mjs",
+    "skills/vizlet/SKILL.md",
+    "skills/vizlet/references/connecting.md",
+    "skills/vizlet/references/plates.md"
+  ]
+}

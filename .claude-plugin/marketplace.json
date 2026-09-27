@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "vizlet",
+  "description": "Vizlet's Claude Code plugins.",
+  "owner": {
+    "name": "Vizlet",
+    "url": "https://vizlet.ai"
+  },
+  "plugins": [
+    {
+      "name": "vizlet",
+      "description": "View, review and share 3D, CAD, BIM and point-cloud models as live browser workspaces. Bundles Vizlet's MCP server with a skill that teaches Claude when to use it and how to author, check and publish a track.",
+      "version": "0.2.2",
+      "category": "design",
+      "source": "./",
+      "homepage": "https://vizlet.ai/developers"
+    }
+  ]
+}

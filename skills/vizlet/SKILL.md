@@ -65,9 +65,11 @@ self-contained viewer instead, and say that is what it is.
    [references/plates.md](references/plates.md) maps common jobs to a starting
    plate. Confirm your choice is in the live list, since the catalog grows every
    week. Then call `list_plates` again with `plate_slug` set: that returns the
-   plate's **authoring brief**, meaning its plugins and, for each plugin, the
-   state slice shape and the action ids. The brief is your vocabulary for every
-   write that follows. For something no plate covers, use the `sandbox` plate: a
+   plate's **authoring brief**, meaning its plugins and, for each plugin, a
+   summary, the state keys it owns and the action ids. Then call it once more
+   with `plugins` set to the ones you will write, for their full state shapes.
+   Those two answers are your vocabulary for every write that follows. For
+   something no plate covers, use the `sandbox` plate: a
    blank chassis whose whole app (geometry, charts, panels, legend controls,
    event wiring) lives in track state.
 2. **Make a track.** `list_organizations`, then `list_projects` (or
@@ -90,16 +92,39 @@ self-contained viewer instead, and say that is what it is.
      returns their actions with parameters; with no arguments it returns only
      the names. Use `update_track_state` (a deep merge, namespaced by plugin
      key) only for what the action catalog does not cover.
+   - Buttons, keys, clicks and rules that CALL an action (an interactions
+     binding, a rule's `then.action`, a legend control, a ui `hook`): take the
+     param keys from the detail brief's `actionParams` or from
+     `list_studio_actions`, whose `runtime` actions are the ones that run in
+     the viewer. A key the action does not declare is silently ignored, so do
+     not guess one.
+   - A 3D scene people will look at: set `threejs.look` before anything else.
+     The brief lists the looks, for example `showroom` indoors, `studio` for
+     parts and products, and `golden-hour` outdoors. That one key sets the light
+     rig, sky or environment, tone mapping, shadows, fog, bloom and
+     antialiasing from a measured recipe. Exposure, lights or post settings you
+     write yourself override it piece by piece, so leave them out. On a track
+     that already has them, set them to null in the same `update_track_state`
+     patch.
+   - Geometry built from `primitives`: draw repeated things (trees, posts,
+     rollers) as ONE item with `instances` or `scatter`, not one item each.
+     Build an assembly as a `group` item that its parts name as `parent`, so
+     it moves and spins as one piece.
 4. **Check it, both ways, every time.** They catch different failures.
    - `verify_track` reads the document. Read `inert` and `partial`, not only
      `ok`: `inert` names state slices no plugin will ever read, and `partial`
-     means whole checks were skipped.
+     means whole checks were skipped. It also checks every action the track
+     calls: `actions.known` is a name its plugin does not have, and
+     `actions.params` a key the action does not declare. Fix both.
    - `render_track` loads the track in a real browser, stores a screenshot as a
      project asset (1 credit), and returns that screenshot as an image. Look at
      it: a blank canvas, a model framed off-screen or overlapping panels are
-     yours to catch before anyone else sees them. Read `settled` (false means it
-     was still loading, so render again) and `console_errors`, the fastest
-     explanation for a blank scene. For a plate that draws on a canvas, render a
+     yours to catch before anyone else sees them. Read `mounted` and `settled`,
+     and the `warning` that explains either: false means the picture shows a
+     loading screen, or a scene still changing. Every render loads the track
+     from scratch, so rendering again gives a slow scene no more time. Read
+     `console_errors` too, the fastest explanation for a blank scene. For a
+     plate that draws on a canvas, render a
      second time with `dpr` set to 2. If no image came back (an older server, or
      `image_omitted` for a very large screenshot), you have not seen it: point
      the user at the stored screenshot instead of describing it. If it reports

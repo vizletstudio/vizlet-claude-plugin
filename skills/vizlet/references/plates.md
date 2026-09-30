@@ -59,6 +59,12 @@ from viewers until the track turns them on; SKILL.md's hand-over step says how.
 | `terrain-twin` | **Studio plate.** A site rather than an asset: terrain plus readings from stations across it. |
 | `deck3d` | **Studio plate.** A template for a product or client presentation: build the product from primitives (or import it), write ONE `showcase` manifest (parts with specs and explode offsets, an operating model with a slider and curves, a tour) and pick a layout (keynote, product-page, kiosk); spec cards, the exploded view, the tour, a lighting switch, readouts and a curve chart come with it. Its brief opens with a `quickstart` to copy. Capturing slides the old way still needs the in-app Studio. |
 
+## Play
+
+| Plate | Use it for |
+|---|---|
+| `fps-arena` | A template for a first-person shooter level that plays in the browser: write ONE `fps` manifest (a themed room, cover kits, and entities placed by name: turrets, drones, pickups, barrels, hazards, a keycard door and an exit) and pick a layout (arena, range, attract); the HUD, the screens, the weapon in hand, the effects and the mechanics come with it. Its brief opens with a `quickstart` to copy. `fps-level-designer` is the plan-view editor for drawing a level by hand instead. |
+
 ## Anything else
 
 | Plate | Use it for |

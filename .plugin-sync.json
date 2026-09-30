@@ -1,7 +1,7 @@
 {
   "note": "Written by scripts/sync-claude-plugin.mjs in the private Vizlet repository. Edit the plugin there, not here.",
-  "version": "0.2.5",
-  "source_commit": "905231fee96e2d4250213de90c17ae5289775f50",
+  "version": "0.2.7",
+  "source_commit": "adb96fe0736fa94dd35845f471402b146c49f0c0",
   "files": [
     ".claude-plugin/marketplace.json",
     ".claude-plugin/plugin.json",

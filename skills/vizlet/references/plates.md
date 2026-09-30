@@ -55,9 +55,9 @@ from viewers until the track turns them on; SKILL.md's hand-over step says how.
 
 | Plate | Use it for |
 |---|---|
-| `digital-twin` | **Studio plate.** An asset (or a fleet) with a timeline clock and telemetry widgets fed by a datasource. |
+| `digital-twin` | **Studio plate.** A template for a factory line, a plant, a fleet or one hero machine: write ONE `twin` manifest (assets, metrics, KPIs) and pick a layout (control-room, asset-focus, fleet, kiosk); status colours, alarms, KPI tiles, asset cards, a heatmap and a simulated shift come with it. Its brief opens with a `quickstart` to copy. |
 | `terrain-twin` | **Studio plate.** A site rather than an asset: terrain plus readings from stations across it. |
-| `deck3d` | **Studio plate.** An interactive 3D presentation with hotspots and camera-view slides. Capturing slides needs the in-app Studio. |
+| `deck3d` | **Studio plate.** A template for a product or client presentation: build the product from primitives (or import it), write ONE `showcase` manifest (parts with specs and explode offsets, an operating model with a slider and curves, a tour) and pick a layout (keynote, product-page, kiosk); spec cards, the exploded view, the tour, a lighting switch, readouts and a curve chart come with it. Its brief opens with a `quickstart` to copy. Capturing slides the old way still needs the in-app Studio. |
 
 ## Anything else
 

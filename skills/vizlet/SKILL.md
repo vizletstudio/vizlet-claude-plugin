@@ -68,8 +68,15 @@ self-contained viewer instead, and say that is what it is.
    plate's **authoring brief**, meaning its plugins and, for each plugin, a
    summary, the state keys it owns and the action ids. Then call it once more
    with `plugins` set to the ones you will write, for their full state shapes.
-   Those two answers are your vocabulary for every write that follows. For
-   something no plate covers, use the `sandbox` plate: a
+   Add `ui` to that list when you will write the plate's chrome (toolbars,
+   header, panels, tabs): it returns the plate's own `ui` tree and hooks, the
+   node types and toolbar items its plugins add and, on a plate whose
+   `uiAuthorable` is true, the grammar a `ui` slice is written in.
+   Those two answers are your vocabulary for every write that follows. When
+   the brief opens with a `quickstart` (a template plate such as
+   `digital-twin`), follow it instead: one write of its manifest and a layout
+   builds the app, so do not rebuild its mechanisms from rules and bindings.
+   For something no plate covers, use the `sandbox` plate: a
    blank chassis whose whole app (geometry, charts, panels, legend controls,
    event wiring) lives in track state.
 2. **Make a track.** `list_organizations`, then `list_projects` (or
@@ -91,13 +98,27 @@ self-contained viewer instead, and say that is what it is.
      `list_studio_actions` with `plugins` set to the plugins you are writing
      returns their actions with parameters; with no arguments it returns only
      the names. Use `update_track_state` (a deep merge, namespaced by plugin
-     key) only for what the action catalog does not cover.
+     key) only for what the action catalog does not cover. Send only what
+     changes, never a whole slice again; to delete an item, write it as
+     `null`. Every write's receipt names its `version_index`; if one breaks
+     the track, `restore_track_version` puts back the version before it,
+     which is far cheaper than rebuilding.
    - Buttons, keys, clicks and rules that CALL an action (an interactions
      binding, a rule's `then.action`, a legend control, a ui `hook`): take the
      param keys from the detail brief's `actionParams` or from
      `list_studio_actions`, whose `runtime` actions are the ones that run in
      the viewer. A key the action does not declare is silently ignored, so do
-     not guess one.
+     not guess one. A string `target` may be a list of ids
+     (`"target": ["rotor", "fan2"]`): the action runs once per id, so one
+     entry replaces a copy of the action per part. The same rule or binding
+     for each of several things (a status per station, a click per part) is
+     ONE entry with `each`: `{field}` in its strings is filled from every
+     entry.
+   - Chrome (a `ui` slice, on a plate whose `uiAuthorable` is true): give each
+     node you may change later an `id`. A later patch then sends only the nodes
+     that change, because a list whose items all carry an `id` merges by id;
+     `{"id": "x", "$patch": "delete"}` removes one. A list with any item
+     lacking an `id` replaces the whole list.
    - A 3D scene people will look at: set `threejs.look` before anything else.
      The brief lists the looks, for example `showroom` indoors, `studio` for
      parts and products, and `golden-hour` outdoors. That one key sets the light
@@ -108,16 +129,31 @@ self-contained viewer instead, and say that is what it is.
      patch.
    - Geometry built from `primitives`: draw repeated things (trees, posts,
      rollers) as ONE item with `instances` or `scatter`, not one item each.
-     Build an assembly as a `group` item that its parts name as `parent`, so
-     it moves and spins as one piece.
+     A regular repeat is one `instances` entry with a `count`: `step` makes a
+     row, `turn` a ring (or three blades on a hub), and `count: [nx, ny, nz]` a
+     grid. Never list regular coordinates by hand. Build an assembly as a `group` item that its parts name as `parent`, so
+     it moves and spins as one piece. `instances` on a group draws the whole
+     assembly again at each one (seven turbines are one group), and every copy
+     follows its parts: spin a part and it turns in every copy. A part whose
+     speed follows a live value (a rotor, a fan, a pump) is one `binding` with
+     target property `spin.x|y|z` and a `curve` transform, not a rule per
+     speed band.
 4. **Check it, both ways, every time.** They catch different failures.
-   - `verify_track` reads the document. Read `inert` and `partial`, not only
-     `ok`: `inert` names state slices no plugin will ever read, and `partial`
-     means whole checks were skipped. It also checks every action the track
-     calls: `actions.known` is a name its plugin does not have, and
-     `actions.params` a key the action does not declare. Fix both.
-   - `render_track` loads the track in a real browser, stores a screenshot as a
-     project asset (1 credit), and returns that screenshot as an image. Look at
+   - The document. Every `update_track_state` and `run_studio_action` answers
+     with a receipt instead of the state: the version, the top-level slices
+     that `changed`, `state_bytes`, and `verify`, the `verify_track` verdict on
+     what it saved. Read `verify` after every write, and read `inert` and
+     `partial` in it, not only `ok`: `inert` names state slices no plugin will
+     ever read, and `partial` means whole checks were skipped. It also checks
+     every action the track calls: `actions.known` is a name its plugin does
+     not have, and `actions.params` a key the action does not declare. Fix
+     both before the next write. `verify_track` gives the same verdict for the
+     track as it stands. Ask a write for `echo` only when you need the whole
+     merged state back; it is often too big for one result.
+   - The picture. Pass `render` (`{}` for the defaults) on the write that
+     should change what is on screen: the same call returns a screenshot from
+     a real browser as an image (1 credit, 10 to 50 seconds). `render_track`
+     takes one on its own and also stores it as a project asset. Look at
      it: a blank canvas, a model framed off-screen or overlapping panels are
      yours to catch before anyone else sees them. Read `mounted` and `settled`,
      and the `warning` that explains either: false means the picture shows a
@@ -166,16 +202,17 @@ and stages hand each other a file or a link, never live state.
 
 - **Never guess a name.** Plugin keys, action ids and plate slugs come from the
   authoring brief, `list_studio_actions` or `list_plates`, and from nowhere else.
-  An invented name is the most common failure, and `update_track_state` reports
-  success for it.
+  An invented name is the most common failure: `update_track_state` saves it
+  anyway, and only its `verify` verdict says nothing reads it.
 - **A success response is not evidence.** Writes succeed whether or not anything
-  reads them. Only `verify_track` reports an ignored slice, and only
-  `render_track` shows whether anything drew.
+  reads them. Only a verdict (a write's `verify`, or `verify_track`) reports an
+  ignored slice, and only a render shows whether anything drew.
 - **Work with the plate, not against it.** A non-empty state slice named after a
   plugin activates that plugin even when the plate did not declare it, so the
   declared list is a floor. When that is not enough, move to the `sandbox`
   plate rather than forcing a plate built for something else.
-- **Spend deliberately.** `render_track` costs 1 credit per image, `render_subject`
+- **Spend deliberately.** A render, from `render_track` or a write's `render`,
+  costs 1 credit per image, `render_subject`
   (a photorealistic image of a design) about 7.8 and only for the track's owner,
   and `freeze_plate` a publish credit. Say so before running a batch.
 - **Some steps need an org admin:** `register_callback`, `revoke_callback` and
@@ -190,10 +227,11 @@ and stages hand each other a file or a link, never live state.
 Give the user:
 
 - the link, and whether it is read-only or interactive;
-- what you checked: `verify_track` clean, the render settled, no console errors;
+- what you checked: the verdict clean, the render settled, no console errors;
 - what you could not do, such as a format only the drop zone accepts, or a step
   that needs the Studio or an org admin;
-- where the screenshot is, so they can look for themselves.
+- where the screenshot is, so they can look for themselves. A write's `render`
+  stores nothing, so take the final one with `render_track`.
 
 Describe how the result looks only from an image you actually looked at. If no
 image came back, say that you have not seen it.

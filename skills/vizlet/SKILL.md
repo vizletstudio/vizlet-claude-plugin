@@ -213,7 +213,7 @@ and stages hand each other a file or a link, never live state.
   plate rather than forcing a plate built for something else.
 - **Spend deliberately.** A render, from `render_track` or a write's `render`,
   costs 1 credit per image, `render_subject`
-  (a photorealistic image of a design) about 7.8 and only for the track's owner,
+  (a photorealistic image of a design) about 13.6 and only for the track's owner,
   and `freeze_plate` a publish credit. Say so before running a batch.
 - **Some steps need an org admin:** `register_callback`, `revoke_callback` and
   `instantiate_workflow`. Signing off a workflow stage has no tool at all; a

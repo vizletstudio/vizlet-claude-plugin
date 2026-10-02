@@ -79,8 +79,18 @@ self-contained viewer instead, and say that is what it is.
    For something no plate covers, use the `sandbox` plate: a
    blank chassis whose whole app (geometry, charts, panels, legend controls,
    event wiring) lives in track state.
-2. **Make a track.** `list_organizations`, then `list_projects` (or
-   `create_project`), then `create_track` with the plate's slug.
+2. **Make a track, then open it where the user can see it.**
+   `list_organizations`, then `list_projects` (or `create_project`), then
+   `create_track` with the plate's slug. Its result carries `url`, the track's
+   full view — the page a person opens to look at it — and `studio_url`, the
+   in-app editor.
+
+   Open `url` beside the conversation before writing anything and keep it
+   there: the desktop app's browser pane, the Claude for Chrome extension, or
+   the link in your first reply. Being told "too bright" while it appears is
+   what Vizlet is for. **Reload after every write** — nothing pushes state
+   changes to that page, so a stale tab reads like a write that did not land.
+
 3. **Put the data in.**
    - A model file: call `list_assets` first and reuse an uploaded model by its
      `asset_id`. A file on the public web goes to `import_model_asset` as a
@@ -90,9 +100,9 @@ self-contained viewer instead, and say that is what it is.
      `import_model_asset` takes glTF/GLB, OBJ, STL, PLY, 3MF, IFC, STEP,
      IGES, DWG, DXF, PCD, XYZ and X3D. Several plates accept more through their
      drop zone in the browser (LAS/LAZ scans, NIfTI and NRRD volumes, VTK
-     results, PDB structures). For those, ask the user to open the track in
-     Vizlet and drop the file onto it; a read-only public link may not offer
-     the drop zone.
+     results, PDB structures). For those, send the user the track's
+     `studio_url` and ask them to drop the file onto it; a read-only public
+     link may not offer the drop zone.
    - Structured data (markers, tables, charts, annotations): prefer
      `run_studio_action`, which runs named, schema-checked edits.
      `list_studio_actions` with `plugins` set to the plugins you are writing
@@ -178,7 +188,7 @@ self-contained viewer instead, and say that is what it is.
        `list_studio_actions` with `names` set to `["presentation.setTools"]`
        returns it, call it with the tools viewers need before you publish. If
        it does not, ask the user to switch them on in the Studio's Presentation
-       settings.
+       settings (`studio_url`).
      - Board and storyboard plates lose their editing tools on a read-only
        link. Pass `viewer_lock` false when viewers should edit.
 
@@ -213,23 +223,40 @@ and stages hand each other a file or a link, never live state.
   plate rather than forcing a plate built for something else.
 - **Spend deliberately.** A render, from `render_track` or a write's `render`,
   costs 1 credit per image, `render_subject`
-  (a photorealistic image of a design) about 13.6 and only for the track's owner,
+  (a photorealistic image of a design) about 17.6 and only for the track's owner,
   and `freeze_plate` a publish credit. Say so before running a batch.
 - **Some steps need an org admin:** `register_callback`, `revoke_callback` and
   `instantiate_workflow`. Signing off a workflow stage has no tool at all; a
   person does that.
 - **Some edits need the in-app Studio.** `run_studio_action` covers edits that
   only change track state. Camera capture, and anything that touches live
-  geometry, has to be done in the Studio by a person.
+  geometry, has to be done in the Studio by a person — so hand over
+  `studio_url` rather than describing where to click.
+
+## File what the tools could not do — without being asked
+
+`report_authoring_gap` files one line into Vizlet's triage queue, ranked with
+every other cause and raised as a GitHub issue. It is
+the ticket channel: asked to report something about these tools, file it there
+instead of drafting text for someone to paste somewhere.
+
+**File the moment you hit it, not when someone asks**, once per gap: you
+guessed what the tools could have told you, worked around one, took five calls
+over a one-call job, or asked the user to do a step because nothing here
+reached it. None of that throws, so nothing else reports it. Give a `summary`
+that stands alone and a `subject` naming the tool; its description says what
+not to file. Then tell the user, in one line, that you filed it.
 
 ## Reporting back
 
 Give the user:
 
+- where to look while you work: the track's `url`;
 - the link, and whether it is read-only or interactive;
 - what you checked: the verdict clean, the render settled, no console errors;
 - what you could not do, such as a format only the drop zone accepts, or a step
-  that needs the Studio or an org admin;
+  that needs the Studio or an org admin — and whether you filed it with
+  `report_authoring_gap`;
 - where the screenshot is, so they can look for themselves. A write's `render`
   stores nothing, so take the final one with `render_track`.
 

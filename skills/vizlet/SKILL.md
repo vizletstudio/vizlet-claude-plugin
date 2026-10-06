@@ -76,9 +76,9 @@ self-contained viewer instead, and say that is what it is.
    the brief opens with a `quickstart` (a template plate such as
    `digital-twin`), follow it instead: one write of its manifest and a layout
    builds the app, so do not rebuild its mechanisms from rules and bindings.
-   For something no plate covers, use the `sandbox` plate: a
-   blank chassis whose whole app (geometry, charts, panels, legend controls,
-   event wiring) lives in track state.
+   For something no plate covers, use the `sandbox` plate (the whole app is
+   track state); logic no plugin has is a script or a sandboxed plugin
+   ([references/custom-logic.md](references/custom-logic.md)).
 2. **Make a track, then open it where the user can see it.**
    `list_organizations`, then `list_projects` (or `create_project`), then
    `create_track` with the plate's slug. Its result carries `url`, the track's
@@ -206,7 +206,8 @@ self-contained viewer instead, and say that is what it is.
 A job that runs through several plates, such as survey to site twin or
 coordination to close-out, is a **workflow**: `list_workflows`,
 `instantiate_workflow`, `get_workflow_progress`. Each stage is its own track,
-and stages hand each other a file or a link, never live state.
+and stages hand on a file, a link or, through `run_wire`, a wire's value,
+never live state.
 
 ## Rules that prevent silent failure
 
@@ -225,9 +226,9 @@ and stages hand each other a file or a link, never live state.
   costs 1 credit per image, `render_subject`
   (a photorealistic image of a design) about 17.6 and only for the track's owner,
   and `freeze_plate` a publish credit. Say so before running a batch.
-- **Some steps need an org admin:** `register_callback`, `revoke_callback` and
-  `instantiate_workflow`. Signing off a workflow stage has no tool at all; a
-  person does that.
+- **Some steps need an org admin:** `register_callback`, `revoke_callback`,
+  `instantiate_workflow` and `draft_plugin`. A person signs off a workflow
+  stage and approves a plugin; no tool does.
 - **Some edits need the in-app Studio.** `run_studio_action` covers edits that
   only change track state. Camera capture, and anything that touches live
   geometry, has to be done in the Studio by a person — so hand over

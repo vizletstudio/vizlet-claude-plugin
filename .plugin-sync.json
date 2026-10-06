@@ -1,7 +1,7 @@
 {
   "note": "Written by scripts/sync-claude-plugin.mjs in the private Vizlet repository. Edit the plugin there, not here.",
-  "version": "0.3.2",
-  "source_commit": "c7745a79d5badd2d52f74a6b8f49e74e9ba2cef3",
+  "version": "0.3.4",
+  "source_commit": "26f4ac08ce1c19d0a79135eb20cee908f4d23fc1",
   "files": [
     ".claude-plugin/marketplace.json",
     ".claude-plugin/plugin.json",
@@ -12,6 +12,7 @@
     "evals/routing.mjs",
     "skills/vizlet/SKILL.md",
     "skills/vizlet/references/connecting.md",
+    "skills/vizlet/references/custom-logic.md",
     "skills/vizlet/references/plates.md"
   ]
 }

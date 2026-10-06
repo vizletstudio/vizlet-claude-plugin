@@ -7,6 +7,8 @@
       "prompt": "We did a lidar scan of our warehouse. What's the best way to let the facilities manager look at it and measure a few distances without installing anything?" },
     { "id": "ifc-section-share", "expect": true,
       "prompt": "Can you publish this IFC model (https://example.com/tower.ifc) so our structural engineer can section it and check the slab openings?" },
+    { "id": "scan-vs-step-deviation", "expect": true,
+      "prompt": "I have the STEP model of a machined bracket and a scan of the first part off the machine (part.step and scan.ply in this repo). Compare the scan to the STEP model, show me where it deviates by more than 0.1 mm, and give me something I can send the supplier." },
     { "id": "stl-print-check", "expect": true,
       "prompt": "Here's an STL of a bracket I want to 3D print: https://example.com/bracket.stl. Can you check it for overhangs and thin walls and give me a link I can review it at?" },
     { "id": "pump-station-twin", "expect": true,

@@ -38,6 +38,7 @@ from viewers until the track turns them on; SKILL.md's hand-over step says how.
 |---|---|
 | `print3d` | 3D-print prep: watertightness, overhangs, orientation, cost, STL/3MF export. |
 | `milling` | CNC milling cost drivers read from B-rep faces (STEP, IGES, BREP). |
+| `part-inspection` | Scan vs CAD: a scan of the part against its STEP/IGES model, a deviation map that computes once both load (name the pair by file in `state.deviation`: `a` the scan, `b` the CAD), ±0.1 mm band, PDF report. Align the scan first. |
 | `cad-sketch-solid` | Model from scratch: sketch a profile, extrude or revolve, combine with booleans. |
 | `robot-cell` | A URDF robot as a kinematic tree you can jog joint by joint. |
 
@@ -66,8 +67,10 @@ from viewers until the track turns them on; SKILL.md's hand-over step says how.
 |---|---|
 | `fps-arena` | A template for a first-person shooter level that plays in the browser: write ONE `fps` manifest (a themed room, cover kits, and entities placed by name: turrets, drones, pickups, barrels, hazards, a keycard door and an exit) and pick a layout (arena, range, attract); the HUD, the screens, the weapon in hand, the effects and the mechanics come with it. Its brief opens with a `quickstart` to copy. A level's models can be GLB files: `import_model_asset` with `attach: false` stores one without adding it to the scene and answers with its `size` and `triangles`. `fps-level-designer` is the plan-view editor for drawing a level by hand instead. |
 
+**A game's look, decided with a person.** When someone should approve a game's characters, sets and props before or after they are in the game (a fighter, a beat 'em up, an fps level), put a track on the `look-board` plate in the same project; the `look-to-fighter`, `look-to-brawler` and `look-to-fps` workflows make both tracks. `run_studio_action look.compose` lays the assets out on the board, each with takes to paint, and `paint_art` on the board paints them. The person approves a take or asks for changes on the board's review panel (`run_studio_action review.ask` turns it on), and `get_track { digest: true }` reads each card's verdict. `run_studio_action look.apply { look: <the digest's apply> }` on the GAME's track then dresses the game with the approved takes, painting nothing twice. For a game made first, run `look.read` on its track, then pass its answer to `look.compose` on the board.
+
 ## Anything else
 
 | Plate | Use it for |
 |---|---|
-| `sandbox` | **Studio plate.** A blank chassis: 3D canvas, 2D overlay and a drop zone, with the whole app written as track state. Release the result with `promote_track_to_plate`. |
+| `sandbox` | **Studio plate.** A blank chassis: 3D canvas, 2D overlay and a drop zone, with the whole app written as track state, including logic no plugin has ([custom-logic.md](custom-logic.md)). Release the result with `promote_track_to_plate`. |
